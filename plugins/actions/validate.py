@@ -150,11 +150,6 @@ def validate_objectstore(value):
     assert value in ["filestore", "bluestore"], "objectstore must be set to 'filestore' or 'bluestore'"
 
 
-def validate_lvm_volumes(value):
-    if notario_store['osd_objectstore'] == "filestore":
-        assert isinstance(value, basestring), "lvm_volumes must contain a 'journal' key when the objectstore is 'filestore'"
-
-
 def validate_ceph_stable_release(value):
     assert value in CEPH_RELEASES, "ceph_stable_release must be set to one of the following: %s" % ", ".join(CEPH_RELEASES)
 
@@ -171,7 +166,6 @@ def validate_rados_options(value):
     msg = "Either radosgw_address, radosgw_address_block or radosgw_interface must be provided"
 
     assert any([radosgw_address_given, radosgw_address_block_given, radosgw_interface_given]), msg
-
 
 
 install_options = (
@@ -232,7 +226,7 @@ lvm_filestore_scenario = ("lvm_volumes", iterables.AllItems((
     (optional('crush_device_class'), types.string),
     ('data', types.string),
     (optional('data_vg'), types.string),
-    ('journal', optional(validate_lvm_volumes)),
+    ('journal', types.string),
     (optional('journal_vg'), types.string),
 )))
 
